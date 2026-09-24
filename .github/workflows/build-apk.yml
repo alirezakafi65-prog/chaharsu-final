@@ -23,12 +23,14 @@ jobs:
           channel: 'stable'
           cache: true
 
-      - name: Force Correct Gradle Wrapper
+      - name: Fix Gradle Wrapper URL
         run: |
-          sed -i 's|github.com/gradle/gradle-distributions/releases/download/v8.14.0|services.gradle.org/distributions|g' android/gradle/wrapper/gradle-wrapper.properties
+          sed -i 's|github.com/gradle/gradle-distributions/releases/download|services.gradle.org/distributions|g' android/gradle/wrapper/gradle-wrapper.properties
+          echo "--- Content of gradle-wrapper.properties after fix ---"
+          cat android/gradle/wrapper/gradle-wrapper.properties
 
       - name: Clean Gradle Cache
-        run: rm -rf ~/.gradle/caches/
+        run: rm -rf $HOME/.gradle/caches/
 
       - name: Install dependencies
         run: flutter pub get
