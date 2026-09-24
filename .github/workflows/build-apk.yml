@@ -2,8 +2,6 @@ name: Build Android APK
 
 on:
   workflow_dispatch:
-  push:
-    branches: [ "main" ]
 
 jobs:
   build:
@@ -24,6 +22,13 @@ jobs:
         with:
           channel: 'stable'
           cache: true
+
+      - name: Force Correct Gradle Wrapper
+        run: |
+          sed -i 's|github.com/gradle/gradle-distributions/releases/download/v8.14.0|services.gradle.org/distributions|g' android/gradle/wrapper/gradle-wrapper.properties
+
+      - name: Clean Gradle Cache
+        run: rm -rf ~/.gradle/caches/
 
       - name: Install dependencies
         run: flutter pub get
