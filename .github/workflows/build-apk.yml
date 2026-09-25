@@ -23,8 +23,16 @@ jobs:
           channel: 'stable'
           cache: true
 
-      - name: Show Gradle Wrapper Content
-        run: cat android/gradle/wrapper/gradle-wrapper.properties
+      - name: Force Correct Gradle Properties & Permissions
+        run: |
+          echo "distributionBase=GRADLE_USER_HOME" > android/gradle/wrapper/gradle-wrapper.properties
+          echo "distributionPath=wrapper/dists" >> android/gradle/wrapper/gradle-wrapper.properties
+          echo "zipStoreBase=GRADLE_USER_HOME" >> android/gradle/wrapper/gradle-wrapper.properties
+          echo "zipStorePath=wrapper/dists" >> android/gradle/wrapper/gradle-wrapper.properties
+          echo "distributionUrl=https\\://services.gradle.org/distributions/gradle-8.14.0-bin.zip" >> android/gradle/wrapper/gradle-wrapper.properties
+          chmod +x android/gradlew
+          echo "--- New gradle-wrapper.properties content: ---"
+          cat android/gradle/wrapper/gradle-wrapper.properties
 
       - name: Install dependencies
         run: flutter pub get
