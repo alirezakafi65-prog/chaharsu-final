@@ -23,15 +23,13 @@ jobs:
           channel: 'stable'
           cache: true
 
-      - name: Force Correct Gradle Properties & Permissions
+      - name: Fix Gradle Wrapper and Permissions
         run: |
-          echo "distributionBase=GRADLE_USER_HOME" > android/gradle/wrapper/gradle-wrapper.properties
-          echo "distributionPath=wrapper/dists" >> android/gradle/wrapper/gradle-wrapper.properties
-          echo "zipStoreBase=GRADLE_USER_HOME" >> android/gradle/wrapper/gradle-wrapper.properties
-          echo "zipStorePath=wrapper/dists" >> android/gradle/wrapper/gradle-wrapper.properties
-          echo "distributionUrl=https\\://services.gradle.org/distributions/gradle-8.14.0-bin.zip" >> android/gradle/wrapper/gradle-wrapper.properties
+          # Replace the entire distributionUrl line with the correct URL
+          sed -i 's|^distributionUrl=.*|distributionUrl=https\\://services.gradle.org/distributions/gradle-8.14.0-bin.zip|' android/gradle/wrapper/gradle-wrapper.properties
+          # Make gradlew executable (common issue when transferring from Windows)
           chmod +x android/gradlew
-          echo "--- New gradle-wrapper.properties content: ---"
+          echo "--- Verifying gradle-wrapper.properties: ---"
           cat android/gradle/wrapper/gradle-wrapper.properties
 
       - name: Install dependencies
